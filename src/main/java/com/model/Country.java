@@ -7,37 +7,22 @@ public class Country {
 	private String code;
 
 	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof Country)) {
-			return false;
-		}
-		final Country other = (Country) obj;
-		if (this.code == null) {
-			if (other.code != null) {
-				return false;
-			}
-		} else if (!this.code.equals(other.code)) {
-			return false;
-		}
-		return true;
-	}
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Country)) return false;
 
-	public String getCode() {
-		return this.code;
+		Country country = (Country) o;
+
+		return !(getCode() != null ? !getCode().equals(country.getCode()) : country.getCode() != null);
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = (prime * result) + ((this.code == null) ? 0 : this.code.hashCode());
-		return result;
+		return getCode() != null ? getCode().hashCode() : 0;
+	}
+
+	public String getCode() {
+		return this.code;
 	}
 
 	public void setCode(final String code) {

@@ -1,9 +1,9 @@
 package com.service.ranking;
 
-import java.util.Comparator;
-
 import com.model.Location;
 import com.model.Person;
+
+import java.util.Comparator;
 
 /**
  * @author nikhilagarwal
@@ -13,6 +13,12 @@ public class DefaultProximityComparator implements Comparator<Person> {
 	// proximity is higher if the industry is a match than if the location is a match
 	private static int WEIGHT_INDUSTRY = 1000;
 	private static int WEIGHT_LOCATION = 10;
+	private Person user;
+
+	public DefaultProximityComparator(final Person user) {
+		super();
+		this.user = user;
+	}
 
 	/**
 	 * Proximity calculator
@@ -38,13 +44,6 @@ public class DefaultProximityComparator implements Comparator<Person> {
 		}
 
 		return proximityScore;
-	}
-
-	private Person user;
-
-	public DefaultProximityComparator(final Person user) {
-		super();
-		this.user = user;
 	}
 
 	@Override

@@ -1,31 +1,30 @@
 package com.service.linkedin;
 
+import com.request.linkedin.LinkedInRequest;
+import com.service.token.TokenService;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.request.linkedin.LinkedInRequest;
-import com.service.token.TokenService;
 
 /**
  * @author nikhilagarwal
  */
 public class LinkedInServiceBuilder {
 
-	public static LinkedInServiceBuilder newLinkedInService() {
-		return new LinkedInServiceBuilder();
-	}
-
 	private final LinkedInService linkedInService;
 	private final List<LinkedInRequest> requests;
 	private final Set<String> scopes;
-
 	private LinkedInServiceBuilder() {
 		super();
 		this.linkedInService = new LinkedInService();
-		this.scopes = new HashSet<String>();
-		this.requests = new ArrayList<LinkedInRequest>();
+		this.scopes = new HashSet<>();
+		this.requests = new ArrayList<>();
+	}
+
+	public static LinkedInServiceBuilder newLinkedInService() {
+		return new LinkedInServiceBuilder();
 	}
 
 	private String getScope() {
@@ -39,9 +38,7 @@ public class LinkedInServiceBuilder {
 
 	public void signAllRequests() throws Exception {
 		this.linkedInService.initiateService(this.getScope());
-		for (final LinkedInRequest linkedInRequest : this.requests) {
-			this.linkedInService.signRequest(linkedInRequest);
-		}
+		this.requests.forEach(this.linkedInService::signRequest);
 	}
 
 	public <T extends LinkedInRequest> LinkedInServiceBuilder with(final T linkedInRequest) {

@@ -1,10 +1,10 @@
 package com.service.ranking;
 
-import java.util.List;
-
 import com.google.common.collect.Ordering;
 import com.model.Connections;
 import com.model.Person;
+
+import java.util.List;
 
 /**
  * Sorting is based on industry and location of the connection with respect to the user. Ideally one would use some sort of mechanism to determine the
@@ -15,32 +15,28 @@ import com.model.Person;
  */
 public class ProximityBasedConnectionRankImpl implements ConnectionRankService {
 
-	private static volatile ProximityBasedConnectionRankImpl instance;
+    private static ProximityBasedConnectionRankImpl instance;
 
-	public static ProximityBasedConnectionRankImpl getInstance() {
-		if (ProximityBasedConnectionRankImpl.instance == null) {
-			synchronized (ProximityBasedConnectionRankImpl.class) {
-				if (ProximityBasedConnectionRankImpl.instance == null) {
-					ProximityBasedConnectionRankImpl.instance = new ProximityBasedConnectionRankImpl();
-				}
-			}
-		}
+    private ProximityBasedConnectionRankImpl() {
+        super();
+    }
 
-		return ProximityBasedConnectionRankImpl.instance;
-	}
+    public static ProximityBasedConnectionRankImpl getInstance() {
+        if (instance == null) {
+            instance = new ProximityBasedConnectionRankImpl();
+        }
 
-	private ProximityBasedConnectionRankImpl() {
-		super();
-	}
+        return instance;
+    }
 
-	@Override
-	public Connections sortedCopy(final Person user, final Connections connections) {
-		final Connections sortedConnections = new Connections();
-		sortedConnections.setCount(connections.getCount());
-		sortedConnections.setStart(connections.getStart());
-		sortedConnections.setTotal(connections.getTotal());
-		final List<Person> people = Ordering.from(new DefaultProximityComparator(user)).reverse().sortedCopy(connections.getPersons());
-		sortedConnections.setPersons(people);
-		return sortedConnections;
-	}
+    @Override
+    public Connections sortedCopy(final Person user, final Connections connections) {
+        final Connections sortedConnections = new Connections();
+        sortedConnections.setCount(connections.getCount());
+        sortedConnections.setStart(connections.getStart());
+        sortedConnections.setTotal(connections.getTotal());
+        final List<Person> people = Ordering.from(new DefaultProximityComparator(user)).reverse().sortedCopy(connections.getPersons());
+        sortedConnections.setPersons(people);
+        return sortedConnections;
+    }
 }

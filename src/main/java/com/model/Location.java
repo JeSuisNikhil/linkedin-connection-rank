@@ -8,53 +8,34 @@ public class Location {
 	private String name;
 
 	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Location)) return false;
+
+		Location location = (Location) o;
+
+		if (getCountry() != null ? !getCountry().equals(location.getCountry()) : location.getCountry() != null)
 			return false;
-		}
-		if (!(obj instanceof Location)) {
-			return false;
-		}
-		final Location other = (Location) obj;
-		if (this.country == null) {
-			if (other.country != null) {
-				return false;
-			}
-		} else if (!this.country.equals(other.country)) {
-			return false;
-		}
-		if (this.name == null) {
-			if (other.name != null) {
-				return false;
-			}
-		} else if (!this.name.equals(other.name)) {
-			return false;
-		}
-		return true;
+		return !(getName() != null ? !getName().equals(location.getName()) : location.getName() != null);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = getCountry() != null ? getCountry().hashCode() : 0;
+		result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+		return result;
 	}
 
 	public Country getCountry() {
 		return this.country;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = (prime * result) + ((this.country == null) ? 0 : this.country.hashCode());
-		result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
-		return result;
-	}
-
 	public void setCountry(final Country country) {
 		this.country = country;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 
 	public void setName(final String name) {

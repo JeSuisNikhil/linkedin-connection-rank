@@ -24,36 +24,36 @@ public class Person {
 		return this.firstName;
 	}
 
-	public String getId() {
-		return this.id;
-	}
-
-	public String getIndustry() {
-		return this.industry;
-	}
-
-	public String getLastName() {
-		return this.lastName;
-	}
-
-	public Location getLocation() {
-		return this.location;
-	}
-
 	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
+	}
+
+	public String getId() {
+		return this.id;
 	}
 
 	public void setId(final String id) {
 		this.id = id;
 	}
 
+	public String getIndustry() {
+		return this.industry;
+	}
+
 	public void setIndustry(final String industry) {
 		this.industry = industry;
 	}
 
+	public String getLastName() {
+		return this.lastName;
+	}
+
 	public void setLastName(final String lastName) {
 		this.lastName = lastName;
+	}
+
+	public Location getLocation() {
+		return this.location;
 	}
 
 	public void setLocation(final Location location) {

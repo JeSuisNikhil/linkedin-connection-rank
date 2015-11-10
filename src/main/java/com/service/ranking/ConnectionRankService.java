@@ -14,5 +14,5 @@ public interface ConnectionRankService {
 	 * @param user
 	 * @param connections
 	 */
-	public Connections sortedCopy(final Person user, final Connections connections);
+	Connections sortedCopy(final Person user, final Connections connections);
 }
