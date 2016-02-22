@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Linkedin-connection-rank by IamCornholio</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Linkedin-connection-rank</h1>
+        <p>A simple LinkedIn connections rank service based on location and industry</p>
+
+        <p class="view"><a href="https://github.com/IamCornholio/linkedin-connection-rank">View the Project on GitHub <small>IamCornholio/linkedin-connection-rank</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/IamCornholio/linkedin-connection-rank/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/IamCornholio/linkedin-connection-rank/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/IamCornholio/linkedin-connection-rank">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="a-simple-linkedin-connections-rank-service" class="anchor" href="#a-simple-linkedin-connections-rank-service" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A Simple LinkedIn Connections Rank Service</h1>
+
+<p>This is a ranking implementation for LinkedIn connections. I have used scribe-java api for Oauth. (See <a href="https://github.com/fernandezpablo85/scribe-java">https://github.com/fernandezpablo85/scribe-java</a>).</p>
+
+<p>The service will connect to your LinkedIn profile, get all your connections and sort them based on industry and location.</p>
+
+<h2>
+<a id="instructions" class="anchor" href="#instructions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Instructions</h2>
+
+<ol>
+<li>Open command prompt and call "mvn test".</li>
+<li>You should get a note explaining that I use scribe that the service is stateless and a URL.</li>
+<li>Copy that URL and go to a browser window. Enter a valid LinkedIn username and password.</li>
+<li>You should get a 5 digit code. Copy that code and paste it in the console window next to the "&gt;&gt;".</li>
+<li>You will see an xml response. Copy that xml into a text editor and examine your results!</li>
+<li>There are 3 such tests. One gets the profile, another gets your connections and the third gets the connections sorted by connection rank.</li>
+</ol>
+
+<h2>
+<a id="folder-structure" class="anchor" href="#folder-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Folder Structure</h2>
+
+<pre><code>├── README.md
+├── pom.xml
+└── src
+    ├── main
+    │   └── java
+    │       └── com
+    │           ├── constants
+    │           │   ├── KeyConstants.java (Has the keys for scribe's oauth test)
+    │           │   └── URLConstants.java (LinkedIn api rest urls)
+    │           ├── model                 (This folder models the linkedin api)
+    │           │   ├── Connections.java
+    │           │   ├── Country.java
+    │           │   ├── Location.java
+    │           │   ├── Person.java
+    │           │   └── utils             (JAXB marshalling/unmarshalling)
+    │           │       ├── ConnectionsParser.java
+    │           │       └── PersonParser.java
+    │           ├── request               (Each request knows it's URL and the service authentication scope required)
+    │           │   └── linkedin
+    │           │       ├── LinkedInConnectionsRequest.java
+    │           │       ├── LinkedInProfileRequest.java
+    │           │       └── LinkedInRequest.java  (Abstract super)
+    │           └── service
+    │               ├── linkedin        (The service will build a LinkedIn service and get the authentication token)
+    │               │   ├── LinkedInService.java
+    │               │   └── LinkedInServiceBuilder.java (The builder build a LinkedInService with multiple requests.
+    │               │      I need a builder so that I can combine the scopes for multiple requests and so that I can
+    │               │      make multiple requests with the same token)
+    │               ├── ranking (The ranking service implemented here. It depends only on model, not on service)
+    │               │   ├── ConnectionRankService.java
+    │               │   ├── DefaultProximityComparator.java
+    │               │   └── ProximityBasedConnectionRankImpl.java
+    │               └── token (The default implementation for getting LinkedIn api auth tokens using a console)
+    │                   ├── ConsoleTokenService.java
+    │                   └── TokenService.java (Extensible way of getting token, the LinkedInService doesn't know how
+    │                       it will get a token. It only has a reference to the tokenService interface. 
+    │                       In the tests I tell it to take a new ConsoleTokenService(), ideally one
+    │                       would use some web based mechanism and implement this interface)
+    └── test
+        └── java
+            └── com
+                └── test
+                    ├── TestLinkedInConnectionsAPI.java (test that I can get all your connections)
+                    ├── TestLinkedInProfileAPI.java   (test that I can get your profile)
+                    └── TestMyRanking.java (test that i can compare a profile with it's connections and sort using
+                         my connection rank)
+</code></pre>
+
+<h2>
+<a id="things-to-do" class="anchor" href="#things-to-do" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Things to do</h2>
+
+<ol>
+<li>Improve the rank algorithm by pulling up full profiles for all connections and using information such as employment history, skills etc. and compare that to current user's profile.</li>
+<li>See if previous communication with connections can be retrieved and if so add that to rank algo.</li>
+<li>See if previous activity of user profile can be retrieved and if so use that to determine if colleagues are more importand or if recruiters are more important ;)</li>
+<li>If not from activity see if the headline can be intelligently read to understand the user's current preference of seeing recruiters being more important or colleagues.</li>
+<li>See if you can turn this into a service that finds recruiters in companies that fit your profile.</li>
+</ol>
+
+<h2>
+<a id="privacy-notedisclaimer" class="anchor" href="#privacy-notedisclaimer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Privacy Note/Disclaimer:</h2>
+
+<ol>
+<li>This service is standalone and stateless and doesn't send, store your the linkedin info (profile, username, password, token or anything! no.. nothing.. nada!) to anyone or anywhere.</li>
+<li>In the tests, profile and connections are printed on the console and that's your environment and not my responsibility. The service by itself has no privacy footprint.</li>
+<li>If you're using this on a public computer, I'd recommend that you clear your browser cache/history, console cache/history if possible. That way there is absolutely zero privacy impact.</li>
+<li>IN ANY CASE. I AM NOT RESPONSIBLE FOR ANYTHING YOU DO WITH THIS CODE.</li>
+</ol>
+
+<h2>
+<a id="have-fun-" class="anchor" href="#have-fun-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Have fun! :)</h2>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/IamCornholio">IamCornholio</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
